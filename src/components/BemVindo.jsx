@@ -1,9 +1,17 @@
-function BemVindo() {
+const BemVindo = ({ nomeUsuario = 'Visitante', totalHabitos = 0 }) => {
+  const nomeFormatado = nomeUsuario.toUpperCase()
+
+  const mensagem = totalHabitos > 0
+  ? `Você tem ${totalHabitos} hábitos para acompanhar.`
+  : 'Nenhum hábito cadastrado ainda. Que tal começar?'
+
   return (
-    <section>
-      <h2>Bem-vindo ao My Daily Habits!</h2>
-      <p>Acompanhe seus hábitos diários e mantenha o foco nas suas metas.</p>
-    </section>
+    <>
+      <section>
+        <h2>Olá, {nomeFormatado}!</h2>
+        <p>{mensagem}</p>
+      </section>
+    </>
   )
 }
 
