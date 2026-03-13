@@ -3,7 +3,7 @@ const BemVindo = ({ nomeUsuario = 'Visitante', totalHabitos = 0 }) => {
 
   const mensagem = totalHabitos > 0
   ? `Você tem ${totalHabitos} hábitos para acompanhar.`
-  : 'Nenhum hábito cadastrado ainda. Que tal começar?'
+  : 'Organize sua rotina e acompanhe seus hábitos do dia.'
 
   return (
     <>
