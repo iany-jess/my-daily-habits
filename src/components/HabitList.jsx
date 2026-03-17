@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import HabitCard from './HabitCard'
 
 const initialHabits = [
@@ -25,10 +25,27 @@ function HabitList() {
   const [novoNome, setNovoNome] = useState('')
   const [novaDescricao, setNovaDescricao] = useState('')
   const [novaCategoria, setNovaCategoria] = useState('')
+  const [erroNome, setErroNome] = useState('')
+  const nomeInputRef = useRef(null)
 
   useEffect(() => {
     localStorage.setItem('my-daily-habits', JSON.stringify(habits))
   }, [habits])
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+
+    if (name === 'novoNome') {
+      setNovoNome(value)
+      if (value.length > 0 && value.length < 3) {
+        setErroNome('O nome deve ter pelo menos 3 caracteres.')
+      } else {
+        setErroNome('')
+      }
+    }
+    if (name === 'novaDescricao') setNovaDescricao(value)
+    if (name === 'novaCategoria') setNovaCategoria(value)
+  }
 
   const removerHabit = (id) => {
     setHabits((currentHabits) => currentHabits.filter((habit) => habit.id !== id))
@@ -39,6 +56,12 @@ function HabitList() {
 
     if (!novoNome.trim()) {
       alert('Informe um nome para o hábito.')
+      nomeInputRef.current?.focus()
+      return
+    }
+
+    if (erroNome) {
+      nomeInputRef.current?.focus()
       return
     }
 
@@ -56,6 +79,8 @@ function HabitList() {
     setNovoNome('')
     setNovaDescricao('')
     setNovaCategoria('')
+    setErroNome('')
+    nomeInputRef.current?.focus()
   }
 
   return (
@@ -66,10 +91,13 @@ function HabitList() {
             Nome do hábito *
             <input
               type="text"
+              name="novoNome"
               value={novoNome}
-              onChange={(event) => setNovoNome(event.target.value)}
+              onChange={handleChange}
+              ref={nomeInputRef}
             />
           </label>
+          {erroNome && <p style={{ color: 'red', fontSize: '0.8rem' }}>{erroNome}</p>}
         </div>
 
         <div>
@@ -77,8 +105,9 @@ function HabitList() {
             Descrição
             <input
               type="text"
+              name="novaDescricao"
               value={novaDescricao}
-              onChange={(event) => setNovaDescricao(event.target.value)}
+              onChange={handleChange}
             />
           </label>
         </div>
@@ -88,8 +117,9 @@ function HabitList() {
             Categoria
             <input
               type="text"
+              name="novaCategoria"
               value={novaCategoria}
-              onChange={(event) => setNovaCategoria(event.target.value)}
+              onChange={handleChange}
             />
           </label>
         </div>
